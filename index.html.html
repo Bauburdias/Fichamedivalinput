@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Alistamento Real · Formulário Medieval</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --pedra: #1f1b1a;
+    --pedra-clara: #2d2725;
+    --pergaminho: #e9dcbc;
+    --tinta: #2b1d14;
+    --carmim: #7a1f2b;
+    --ouro: #b8892b;
+    --ouro-claro: #e0b857;
+    --sombra: rgba(0, 0, 0, .45);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "IM Fell English", Georgia, serif;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: var(--tinta);
+    background:
+      repeating-linear-gradient(0deg, transparent 0 58px, rgba(0,0,0,.25) 58px 60px),
+      repeating-linear-gradient(90deg, transparent 0 118px, rgba(0,0,0,.2) 118px 120px),
+      var(--pedra);
+    padding: 2rem 1rem 3rem;
+  }
+
+  /* Cabeçalho */
+  header { text-align: center; color: var(--ouro-claro); margin-bottom: 2rem; }
+  header h1 {
+    font-family: "UnifrakturCook", "Old English Text MT", serif;
+    font-size: clamp(2.6rem, 8vw, 4.8rem);
+    margin: 0;
+    line-height: 1.1;
+    text-shadow: 3px 3px 0 var(--carmim), 5px 5px 12px var(--sombra);
+  }
+  header p { margin: .5rem auto 0; max-width: 34rem; color: var(--pergaminho); font-style: italic; }
+  .escudo { width: 64px; height: 76px; margin-bottom: .5rem; }
+
+  /* Pergaminho */
+  form {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 2.2rem clamp(1.2rem, 4vw, 2.6rem);
+    background:
+      radial-gradient(ellipse at top left, rgba(255,255,255,.35), transparent 60%),
+      radial-gradient(ellipse at bottom right, rgba(122,31,43,.18), transparent 55%),
+      var(--pergaminho);
+    border: 4px double var(--ouro);
+    border-radius: 6px;
+    box-shadow: 0 0 0 6px var(--pedra-clara), 0 20px 50px var(--sombra);
+  }
+  fieldset {
+    border: 0;
+    border-top: 2px solid var(--carmim);
+    margin: 0 0 1.6rem;
+    padding: 0;
+  }
+  legend {
+    font-family: "UnifrakturCook", serif;
+    font-size: 1.7rem;
+    color: var(--carmim);
+    padding: 0 .8rem 0 0;
+  }
+  .grade { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1rem 1.4rem; margin-top: .6rem; }
+  .campo { display: flex; flex-direction: column; gap: .25rem; }
+  .largo { grid-column: 1 / -1; }
+  label, .rotulo { font-weight: bold; }
+  small { font-style: italic; opacity: .75; }
+
+  input, select, textarea {
+    font: inherit;
+    color: var(--tinta);
+    background: rgba(255, 252, 240, .7);
+    border: 2px solid #8a6b3f;
+    border-radius: 3px;
+    padding: .45rem .6rem;
+    width: 100%;
+  }
+  textarea { resize: vertical; min-height: 6rem; }
+  input[type="color"] { padding: .15rem; height: 2.6rem; cursor: pointer; }
+  input[type="range"] { padding: 0; accent-color: var(--carmim); }
+  input[type="file"]::file-selector-button {
+    font: inherit; background: var(--carmim); color: var(--pergaminho);
+    border: 0; padding: .35rem .8rem; margin-right: .8rem; border-radius: 3px; cursor: pointer;
+  }
+  input[type="checkbox"], input[type="radio"] { width: auto; accent-color: var(--carmim); transform: scale(1.2); margin-right: .4rem; }
+  :is(input, select, textarea):focus-visible,
+  button:focus-visible, input[type="image"]:focus-visible {
+    outline: 3px solid var(--ouro);
+    outline-offset: 2px;
+  }
+
+  .opcoes { display: flex; flex-wrap: wrap; gap: .4rem 1.4rem; }
+  .opcoes label { font-weight: normal; cursor: pointer; }
+  output { font-weight: bold; color: var(--carmim); }
+
+  /* Botões */
+  .acoes { display: flex; flex-wrap: wrap; align-items: center; gap: .8rem; margin-top: 1rem; }
+  button, input[type="submit"], input[type="reset"], input[type="button"] {
+    width: auto;
+    font: inherit;
+    font-weight: bold;
+    cursor: pointer;
+    padding: .6rem 1.4rem;
+    border-radius: 3px;
+    border: 2px solid var(--ouro);
+    background: var(--carmim);
+    color: var(--pergaminho);
+    transition: background .2s, transform .1s;
+  }
+  button:hover, input[type="submit"]:hover { background: #5c141f; }
+  button:active, input[type="submit"]:active { transform: translateY(1px); }
+  .secundario { background: transparent !important; color: var(--carmim) !important; border-color: var(--carmim) !important; }
+  .selo { width: 3rem; height: 3rem; padding: 0; border: 0; background: none; border-radius: 50%; cursor: pointer; }
+
+  /* Resultado */
+  #resultado {
+    max-width: 760px; margin: 1.5rem auto 0;
+    background: var(--pedra-clara); color: var(--pergaminho);
+    border-left: 6px solid var(--ouro); padding: 1rem 1.4rem; border-radius: 4px;
+  }
+  #resultado[hidden] { display: none; }
+  #resultado pre { white-space: pre-wrap; margin: .5rem 0 0; font-family: inherit; }
+</style>
+</head>
+<body>
+
+<header>
+  <svg class="escudo" viewBox="0 0 64 76" aria-hidden="true">
+    <path d="M4 4h56v34c0 18-14 29-28 34C18 67 4 56 4 38z" fill="#7a1f2b" stroke="#e0b857" stroke-width="3"/>
+    <path d="M32 14v46M14 30h36" stroke="#e0b857" stroke-width="5"/>
+  </svg>
+  <h1>Alistamento Real</h1>
+  <p>Preencha o pergaminho abaixo para jurar fidelidade ao reino e ser aceito entre os nossos.</p>
+</header>
+
+<form id="pergaminho" action="#" method="post" enctype="multipart/form-data">
+  <input type="hidden" name="selo_do_reino" value="reino-de-avalon-1250">
+
+  <fieldset>
+    <legend>Quem sois vós?</legend>
+    <div class="grade">
+      <div class="campo">
+        <label for="nome">Nome do cavaleiro</label>
+        <input type="text" id="nome" name="nome" placeholder="Sir Arthur de Avalon" required>
+      </div>
+      <div class="campo">
+        <label for="titulo">Título de nobreza</label>
+        <input type="text" id="titulo" name="titulo" list="titulos" placeholder="Escolha ou digite">
+        <datalist id="titulos">
+          <option value="Barão"><option value="Conde"><option value="Duque"><option value="Cavaleiro"><option value="Escudeiro">
+        </datalist>
+      </div>
+      <div class="campo">
+        <label for="nascimento">Data de nascimento</label>
+        <input type="date" id="nascimento" name="nascimento">
+      </div>
+      <div class="campo">
+        <label for="cavalos">Cavalos no estábulo</label>
+        <input type="number" id="cavalos" name="cavalos" min="0" max="50" value="1">
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Como vos encontrar</legend>
+    <div class="grade">
+      <div class="campo">
+        <label for="email">Corvo mensageiro (e-mail)</label>
+        <input type="email" id="email" name="email" placeholder="corvo@castelo.com" required>
+      </div>
+      <div class="campo">
+        <label for="telefone">Sinal de fumaça (telefone)</label>
+        <input type="tel" id="telefone" name="telefone" placeholder="(63) 99999-9999">
+      </div>
+      <div class="campo">
+        <label for="feudo">Site do feudo</label>
+        <input type="url" id="feudo" name="feudo" placeholder="https://meufeudo.com">
+      </div>
+      <div class="campo">
+        <label for="senha">Senha do castelo</label>
+        <input type="password" id="senha" name="senha" minlength="4" required>
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Vossa jornada</legend>
+    <div class="grade">
+      <div class="campo">
+        <label for="torneio">Hora do torneio</label>
+        <input type="time" id="torneio" name="torneio">
+      </div>
+      <div class="campo">
+        <label for="banquete">Dia e hora do banquete</label>
+        <input type="datetime-local" id="banquete" name="banquete">
+      </div>
+      <div class="campo">
+        <label for="colheita">Mês da colheita</label>
+        <input type="month" id="colheita" name="colheita">
+      </div>
+      <div class="campo">
+        <label for="peregrinacao">Semana da peregrinação</label>
+        <input type="week" id="peregrinacao" name="peregrinacao">
+      </div>
+      <div class="campo">
+        <label for="reino">Reino de origem</label>
+        <select id="reino" name="reino">
+          <option value="">Selecione…</option>
+          <optgroup label="Terras do Norte">
+            <option>Winterfell</option><option>Nortúmbria</option>
+          </optgroup>
+          <optgroup label="Terras do Sul">
+            <option>Camelot</option><option>Avalon</option>
+          </optgroup>
+        </select>
+      </div>
+      <div class="campo">
+        <label for="brasao">Cor do brasão</label>
+        <input type="color" id="brasao" name="brasao" value="#7a1f2b">
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Vossas virtudes</legend>
+    <div class="grade">
+      <div class="campo largo">
+        <span class="rotulo">Classe</span>
+        <div class="opcoes" role="radiogroup" aria-label="Classe">
+          <label><input type="radio" name="classe" value="cavaleiro" checked>Cavaleiro</label>
+          <label><input type="radio" name="classe" value="arqueiro">Arqueiro</label>
+          <label><input type="radio" name="classe" value="mago">Mago</label>
+          <label><input type="radio" name="classe" value="ferreiro">Ferreiro</label>
+        </div>
+      </div>
+      <div class="campo largo">
+        <span class="rotulo">Armas dominadas</span>
+        <div class="opcoes">
+          <label><input type="checkbox" name="armas" value="espada">Espada</label>
+          <label><input type="checkbox" name="armas" value="arco">Arco e flecha</label>
+          <label><input type="checkbox" name="armas" value="lanca">Lança</label>
+          <label><input type="checkbox" name="armas" value="machado">Machado</label>
+        </div>
+      </div>
+      <div class="campo largo">
+        <label for="coragem">Nível de coragem: <output id="saidaCoragem">50</output>/100</label>
+        <input type="range" id="coragem" name="coragem" min="0" max="100" value="50">
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Pergaminhos e juramento</legend>
+    <div class="grade">
+      <div class="campo">
+        <label for="busca">Consultar o grimório</label>
+        <input type="search" id="busca" name="busca" placeholder="Buscar feitiço ou lenda">
+      </div>
+      <div class="campo">
+        <label for="arquivo">Carta de recomendação</label>
+        <input type="file" id="arquivo" name="arquivo">
+      </div>
+      <div class="campo largo">
+        <label for="juramento">Vosso juramento</label>
+        <textarea id="juramento" name="juramento" placeholder="Juro defender o reino com honra e coragem…"></textarea>
+      </div>
+      <div class="campo largo">
+        <label><input type="checkbox" name="aceite" required>Aceito servir ao rei e seguir o código de cavalaria.</label>
+      </div>
+    </div>
+  </fieldset>
+
+  <div class="acoes">
+    <input type="submit" value="Jurar fidelidade">
+    <input type="reset" value="Limpar pergaminho" class="secundario">
+    <input type="button" id="btnRolar" value="Rolar os dados" class="secundario">
+    <input type="image" class="selo" alt="Selar com o brasão real"
+      src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><circle cx='32' cy='32' r='30' fill='%237a1f2b' stroke='%23b8892b' stroke-width='4'/><path d='M32 12l6 14h14l-11 9 4 15-13-9-13 9 4-15-11-9h14z' fill='%23e0b857'/></svg>">
+  </div>
+</form>
+
+<section id="resultado" hidden aria-live="polite">
+  <strong>Mensagem do reino</strong>
+  <pre id="saida"></pre>
+</section>
+
+<script>
+  const form = document.getElementById('pergaminho');
+  const coragem = document.getElementById('coragem');
+  const saidaCoragem = document.getElementById('saidaCoragem');
+  const resultado = document.getElementById('resultado');
+  const saida = document.getElementById('saida');
+
+  coragem.addEventListener('input', () => saidaCoragem.textContent = coragem.value);
+
+  form.addEventListener('reset', () => {
+    saidaCoragem.textContent = 50;
+    resultado.hidden = true;
+  });
+
+  // Botão comum: rola um dado de 20 faces e ajusta a coragem
+  document.getElementById('btnRolar').addEventListener('click', () => {
+    const dado = Math.ceil(Math.random() * 20);
+    coragem.value = dado * 5;
+    saidaCoragem.textContent = coragem.value;
+    alert('O dado caiu em ' + dado + '! Coragem ajustada.');
+  });
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const dados = new FormData(form);
+    const linhas = [];
+    for (const [chave, valor] of dados.entries()) {
+      if (chave === 'senha') continue;
+      linhas.push(chave + ': ' + (valor instanceof File ? (valor.name || '(nenhum arquivo)') : valor));
+    }
+    saida.textContent = 'Vosso alistamento foi recebido, nobre ' + (dados.get('nome') || 'viajante') + '!\n\n' + linhas.join('\n');
+    resultado.hidden = false;
+    resultado.scrollIntoView({ behavior: 'smooth' });
+  });
+</script>
+</body>
+</html>
